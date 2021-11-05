@@ -8,11 +8,11 @@ class TextDataset(torch.utils.data.Dataset):
 
     def _transform(self, encoding):
         start_idx = torch.randint(low=0, high=512, size=(1,))
-        return {k:v[start_idx:start_idx+self.length] 
-                for k, v in encoding.items()}
+        return {key:val[start_idx:start_idx+self.length] 
+                for key, val in encoding.items()}
 
     def __getitem__(self, idx):
-        item = {key: torch.tensor(val[idx])
+        item = {key: self.transform(torch.tensor(val[idx]))
                 for key, val in self.encodings.items()}
         item['labels'] = torch.tensor(self.labels[idx]) # check
         return item
